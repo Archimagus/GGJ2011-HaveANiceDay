@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d971c423255dff74cb9ae569a2583ca8
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - mat: {instanceID: 0}
+  - def: {instanceID: 0}
+  - mouseOver: {instanceID: 0}
+  - click: {instanceID: 0}
+  - chooseraceobject: {instanceID: 0}
+  - buttonpinkobject: {instanceID: 0}
+  - buttonblueobject: {instanceID: 0}
+  - player1object: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
