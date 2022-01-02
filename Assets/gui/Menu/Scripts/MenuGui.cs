@@ -13,7 +13,7 @@ public class MenuGui : MonoBehaviour {
 	void Start () 
     {
         SoundButtonRect = new Rect(0, 0, 0, 0);
-        gameObject.GetComponent<AudioSource>().Play(44100 * 29);
+        gameObject.GetComponent<AudioSource>().PlayDelayed(29);
         var sound = PlayerPrefs.GetString("Sound", "On");
         soundOn = sound == "On";
         if (!soundOn)
@@ -24,7 +24,6 @@ public class MenuGui : MonoBehaviour {
 
     void OnGUI()
     {
-        Debug.Log("On Gui");
         if (SoundButtonRect == new Rect(0, 0, 0, 0))
         {
             SoundButtonRect = new Rect(40, 0, 20, 20);
@@ -53,7 +52,7 @@ public class MenuGui : MonoBehaviour {
 
     private void SetSound()
     {
-        var audioSources = FindObjectsOfTypeIncludingAssets(typeof(AudioSource)) as AudioSource[];
+        var audioSources = Resources.FindObjectsOfTypeAll<AudioSource>();
         foreach (var source in audioSources)
         {
             source.mute = !soundOn;

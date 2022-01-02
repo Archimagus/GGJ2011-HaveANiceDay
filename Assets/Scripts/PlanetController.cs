@@ -9,6 +9,8 @@ public class PlanetController : MonoBehaviour {
 	public AudioClip scream;
 	public GameObject detonator;
     public GameObject target;
+	public Material burnedMat;
+	public ParticleSystem burnParticles;
 	public float OrbitSpeed = 20;
 	Rigidbody body;
 	Vector3 velocityDampening;
@@ -50,6 +52,8 @@ public class PlanetController : MonoBehaviour {
             var det = detonator.GetComponent<Detonator>();
             var audio = det.GetComponent<AudioSource>();
 			audio.PlayOneShot(scream);
+			GetComponent<MeshRenderer>().sharedMaterial = burnedMat;
+			burnParticles.Play();
 		}
 	}
     public void TriggerTargetRing()

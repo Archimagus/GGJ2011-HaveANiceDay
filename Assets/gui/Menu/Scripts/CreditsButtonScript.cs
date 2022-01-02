@@ -5,6 +5,6 @@ public class CreditsButtonScript
     : MyButton {
     protected override void Click()
     {
-            Camera.mainCamera.transform.position = new Vector3(0, 8, 15);
+            Camera.main.transform.position = new Vector3(0, 8, 15);
     }
 }

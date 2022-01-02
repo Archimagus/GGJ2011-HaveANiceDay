@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Timers;
+using UnityEngine.SceneManagement;
 
 public enum Happieness
 {
@@ -31,32 +32,32 @@ public class Gui : MonoBehaviour
 
     public Happieness PinkMood = Happieness.Neutral;
     public Happieness BlueMood = Happieness.Neutral;
-	private string race = "pink";
+	private string _race = "pink";
     public string Race
     {
-        get { return race; }
+        get { return _race; }
         set 
         {
-            race = value;
+            _race = value;
             if (showTurnMessage)
             {
-                TriggerPlayerTurn(race);
+                TriggerPlayerTurn(_race);
             }
         }
     }
-    private Vector2 smallSize;
-    private Vector2 bigSize;
-    private float edgeOffset = 10;
-    private Winner winner = Winner.None;
+    private Vector2 _smallSize;
+    private Vector2 _bigSize;
+    private float _edgeOffset = 10;
+    private Winner _winner = Winner.None;
     public bool showTurnMessage = true;
-    private string playerTurn = null;
-    private bool soundOn = true;
+    private string _playerTurn = null;
+    private bool _soundOn = true;
     public Rect SoundButtonRect { get; set; }
 	void Start () 
 	{
         var sound = PlayerPrefs.GetString("Sound", "On");
-        soundOn = sound == "On";
-        if (!soundOn)
+        _soundOn = sound == "On";
+        if (!_soundOn)
         {
             SetSound();
         }
@@ -64,13 +65,13 @@ public class Gui : MonoBehaviour
 		Race = PlayerPrefs.GetString("characterChoice");
         float aspect = roachHappy.width / roachHappy.height;
         float maxHeight = Mathf.Min(roachHappy.height / 3, Screen.height / 6);
-        smallSize = new Vector2(maxHeight/aspect, maxHeight);
+        _smallSize = new Vector2(maxHeight/aspect, maxHeight);
         maxHeight = Mathf.Min(roachHappy.height / 2, Screen.height / 4);
-        bigSize = new Vector2(maxHeight / aspect, maxHeight);
+        _bigSize = new Vector2(maxHeight / aspect, maxHeight);
 
         if (Screen.width < 800)
         {
-            edgeOffset = 1;
+            _edgeOffset = 1;
         }
 	}
 
@@ -82,10 +83,10 @@ public class Gui : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.LoadLevel("MainMenu");
+            SceneManager.LoadScene("MainMenu");
         }
         Texture tex;
-        if (winner == Winner.None)
+        if (_winner == Winner.None)
         {
             switch (PinkMood)
             {
@@ -102,13 +103,13 @@ public class Gui : MonoBehaviour
                     tex = alienAngry;
                     break;
             }
-            if (race == "pink")
+            if (_race == "pink")
             {
-                GUI.Label(new Rect(edgeOffset, Screen.height - bigSize.y - edgeOffset, bigSize.x, bigSize.y), tex);
+                GUI.Label(new Rect(_edgeOffset, Screen.height - _bigSize.y - _edgeOffset, _bigSize.x, _bigSize.y), tex);
             }
             else
             {
-                GUI.Label(new Rect(edgeOffset, Screen.height - smallSize.y - edgeOffset, smallSize.x, smallSize.y), tex);
+                GUI.Label(new Rect(_edgeOffset, Screen.height - _smallSize.y - _edgeOffset, _smallSize.x, _smallSize.y), tex);
             }
             switch (BlueMood)
             {
@@ -125,21 +126,21 @@ public class Gui : MonoBehaviour
                     tex = roachAngry;
                     break;
             }
-            if (race == "blue")
+            if (_race == "blue")
             {
-                GUI.Label(new Rect(Screen.width - bigSize.x - edgeOffset, Screen.height - bigSize.y - edgeOffset, bigSize.x, bigSize.y), tex);
+                GUI.Label(new Rect(Screen.width - _bigSize.x - _edgeOffset, Screen.height - _bigSize.y - _edgeOffset, _bigSize.x, _bigSize.y), tex);
             }
             else
             {
-                GUI.Label(new Rect(Screen.width - smallSize.x - edgeOffset, Screen.height - smallSize.y - edgeOffset, smallSize.x, smallSize.y), tex);
+                GUI.Label(new Rect(Screen.width - _smallSize.x - _edgeOffset, Screen.height - _smallSize.y - _edgeOffset, _smallSize.x, _smallSize.y), tex);
             }
-            if (playerTurn != null)
+            if (_playerTurn != null)
             {
-                if (playerTurn == "pink")
+                if (_playerTurn == "pink")
                 {
                     tex = alienTurn;
                 }
-                else if (playerTurn == "blue")
+                else if (_playerTurn == "blue")
                 {
                     tex = roachTurn;
                 }
@@ -148,11 +149,11 @@ public class Gui : MonoBehaviour
         }
         else
         {
-            if (winner == Winner.Blue)
+            if (_winner == Winner.Blue)
             {
                 tex = roachWin;
             }
-            else if (winner == Winner.Pink)
+            else if (_winner == Winner.Pink)
             {
                 tex = alienWin;
             }
@@ -167,12 +168,12 @@ public class Gui : MonoBehaviour
             playAgainButton.transform.position = Camera.main.transform.position + new Vector3(-4, -10, -5);
             mainMenuButton.transform.position = Camera.main.transform.position + new Vector3(4, -10, -5);
         }
-        if(soundOn)
+        if(_soundOn)
         {
             if(GUI.Button(SoundButtonRect, greenCheck))
             {
                 PlayerPrefs.SetString("Sound", "Off");
-                soundOn = false;
+                _soundOn = false;
                 SetSound();
             }
         }
@@ -181,7 +182,7 @@ public class Gui : MonoBehaviour
             if(GUI.Button(SoundButtonRect, redX))
             {
                 PlayerPrefs.SetString("Sound", "On");
-                soundOn = true;
+                _soundOn = true;
                 SetSound();
             }
         }
@@ -190,29 +191,42 @@ public class Gui : MonoBehaviour
 
     private void SetSound()
     {
-        var audioSources = FindObjectsOfTypeIncludingAssets(typeof(AudioSource)) as AudioSource[];
+        var audioSources = Resources.FindObjectsOfTypeAll<AudioSource>();
         foreach (var source in audioSources)
         {
-            source.mute = !soundOn;
+            source.mute = !_soundOn;
         }
     }
 
+    private Winner _w;
     public void TriggerWinner(Winner w)
     {
-        Timer t = new Timer(3000);
-        t.AutoReset = false;
-        t.Elapsed += (_, e) => winner = w;
-        t.Start();
-    }
+        _w = w;
 
+        Invoke(nameof(setWinner), 3);
+        //Timer t = new Timer(3000);
+        //t.AutoReset = false;
+        //t.Elapsed += (_, e) => _winner = w;
+        //t.Start();
+    }
+    private void setWinner()
+	{
+        _winner = _w;
+	}
     private void TriggerPlayerTurn(string turn)
     {
-        playerTurn = turn;
-        Timer t = new Timer(2000);
-        t.AutoReset = false;
-        t.Elapsed += (_, e) => playerTurn = null;
-        t.Start();
+        _playerTurn = turn;
+
+        //Timer t = new Timer(2000);
+        //t.AutoReset = false;
+        //t.Elapsed += (_, e) => _playerTurn = null;
+        //t.Start();
+        Invoke(nameof(clearPlayerTurn), 2);
     }
+    private void clearPlayerTurn()
+	{
+        _playerTurn = null;
+	}
 
 
 }

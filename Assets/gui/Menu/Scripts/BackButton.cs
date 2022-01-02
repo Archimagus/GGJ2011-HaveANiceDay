@@ -7,6 +7,6 @@ public class BackButton
     protected override void Click()
     {
         base.Click();
-        Camera.mainCamera.transform.position = new Vector3(0, 8, 0);
+        Camera.main.transform.position = new Vector3(0, 8, 0);
     }
 }

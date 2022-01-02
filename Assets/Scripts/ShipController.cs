@@ -10,6 +10,8 @@ public class ShipController : MonoBehaviour {
 
     public SunController sunController;
 	public GameObject ship3;
+    public LineRenderer band;
+    public GameObject bandAttachPoint;
 	public GameObject projectile;
 	public GameObject projectileDetonator;
 	public AudioClip explosionSound;
@@ -32,7 +34,6 @@ public class ShipController : MonoBehaviour {
     private Vector3 ship3Offset;
     bool twoPlayer = true;
     bool flyOff = false;
-    public InteractiveCloth cloth;
 	// Use this for initialization
 	void Start () 
     {
@@ -58,6 +59,7 @@ public class ShipController : MonoBehaviour {
 		var fireDown = false;
         Vector2 mouseGuiPos = Input.mousePosition;
         mouseGuiPos.y = Screen.height - mouseGuiPos.y;
+        band.SetPosition(1, band.transform.worldToLocalMatrix.MultiplyPoint(bandAttachPoint.transform.position));
         if (!Gui.SoundButtonRect.Contains(mouseGuiPos))
         {
             fireDown = Input.GetButton("Fire1");
@@ -129,7 +131,6 @@ public class ShipController : MonoBehaviour {
                 transform.position = Vector3.SmoothDamp(transform.position, newPos, ref shipVelocity, 1.5f);
             }
         }
-        cloth.randomAcceleration = transform.forward * 10;
 
         if (sunController.winner == Winner.None)
         {
@@ -164,8 +165,9 @@ public class ShipController : MonoBehaviour {
             {
                 if (p != null)
                 {
-                    var velocity = p.rigidbody.velocity.magnitude;
-                    var velocityTowardSun = Vector3.Dot(p.rigidbody.velocity, -p.transform.position.normalized);
+                    var rb = p.GetComponent<Rigidbody>();
+                    var velocity = rb.velocity.magnitude;
+                    var velocityTowardSun = Vector3.Dot(rb.velocity, -p.transform.position.normalized);
                     if (velocityTowardSun > 0.2f || velocity > 0.5f)
                     {
                         planetsMoving = true;
@@ -211,7 +213,7 @@ public class ShipController : MonoBehaviour {
         power = Mathf.Max(power, 5);
 		rb.velocity = transform.forward * power;
 		rb.mass = 4;
-		var pc = moon.AddComponent("ProjectileController") as ProjectileController;
+		var pc = moon.AddComponent<ProjectileController>();
 		pc.detonator = Instantiate(projectileDetonator, moon.transform.position, Quaternion.identity) as GameObject;
 		pc.explosionSound = Instantiate(explosionSound, moon.transform.position, Quaternion.identity) as AudioClip;
         pc.shipController = this;

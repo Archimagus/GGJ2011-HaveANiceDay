@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayButtonTwo
     : MyButton {
@@ -10,11 +11,11 @@ public class PlayButtonTwo
         if (!string.IsNullOrEmpty(PlayerPrefs.GetString("characterChoice")))
         {
             PlayerPrefs.SetString("howToPlay", "skip");
-            Application.LoadLevel("PlanetCracker");
+            SceneManager.LoadScene("PlanetCracker");
         }
         else
         {
-            Camera.mainCamera.transform.position = new Vector3(0, 8, 0);
+            Camera.main.transform.position = new Vector3(0, 8, 0);
         }
     }
 }

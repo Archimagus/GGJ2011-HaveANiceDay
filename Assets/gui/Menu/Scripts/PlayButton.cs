@@ -7,7 +7,7 @@ public class PlayButton : MyButton
 	{
         base.Click();
 
-        Camera.mainCamera.transform.position = new Vector3(25, 8, 15);
+        Camera.main.transform.position = new Vector3(25, 8, 15);
 
         //if (string.IsNullOrEmpty(PlayerPrefs.GetString("howToPlay")) &&
         //    !string.IsNullOrEmpty(PlayerPrefs.GetString("characterChoice")))
@@ -16,7 +16,7 @@ public class PlayButton : MyButton
         //}
         //else if(!string.IsNullOrEmpty(PlayerPrefs.GetString("characterChoice")))
         //{
-        //    Application.LoadLevel("PlanetCracker");
+        //    SceneManager.LoadScene("PlanetCracker");
         //}
 	}
 }

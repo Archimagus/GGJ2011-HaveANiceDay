@@ -5,9 +5,9 @@ public class ExitButton : MyButton
 {
     void Start()
     {
-        if (Application.isWebPlayer)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            GameObject.Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 	protected override void Click()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class StartButton : MyButton 
 {
@@ -8,7 +9,7 @@ public class StartButton : MyButton
 		base.Click();
 		if(!string.IsNullOrEmpty(PlayerPrefs.GetString("characterChoice")))
 		{
-			Application.LoadLevel("PlanetCracker");
+			SceneManager.LoadScene("PlanetCracker");
 		}
 	}
 }

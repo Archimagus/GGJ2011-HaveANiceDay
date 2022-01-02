@@ -207,7 +207,7 @@ public class SunController : MonoBehaviour {
 		}
         if (winner != Winner.None)
         {
-            Camera.mainCamera.transform.position = Vector3.SmoothDamp(Camera.mainCamera.transform.position, new Vector3(0, 40, 0), ref cameraVelocity, 1.0f);
+            Camera.main.transform.position = Vector3.SmoothDamp(Camera.main.transform.position, new Vector3(0, 40, 0), ref cameraVelocity, 1.0f);
             if (cameraVelocity.magnitude < 0.05f)
             {
 
